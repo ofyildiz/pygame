@@ -16,8 +16,10 @@ class App:
         if event.type == pygame.QUIT:
             self._running = False
     def on_loop(self):
-        logo = pygame.image.load("characters.png")
-        self._display_surf.blit(logo, (50,50))
+        spritesheet = pygame.image.load("characters.png")
+        spritesheet.set_clip(0, 0, 100, 100)
+        avatar = spritesheet.subsurface(spritesheet.get_clip())
+        self._display_surf.blit(avatar, (50,50))
     def on_render(self):
         pygame.display.flip()
     def on_cleanup(self):
