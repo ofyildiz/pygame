@@ -26,11 +26,11 @@ class Modifier:
         else:
             return -1
 
-class Char(Modifier, Ability):
+class Char():
     def __init__(self,
                  strength, dexterity, constitution,
                  intelligence, wisdom, charisma):
-        self.AbilitieScore = Ability(strength, dexterity, constitution,
-                                     intelligence, wisdom, charisma)
-        self.AbilityModifier = Ability(strength, dexterity, constitution,
-                                       intelligence, wisdom, charisma)
+        self.AbilityScore = Ability(strength, dexterity, constitution,
+                                    intelligence, wisdom, charisma)
+        self.AbilityModifier = Modifier(strength, dexterity, constitution,
+                                        intelligence, wisdom, charisma)
