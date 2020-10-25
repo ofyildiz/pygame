@@ -46,7 +46,7 @@ class AbilityScore:
 
 class Race:
     def __init__(self,
-                 race):
+                 race='Human'):
         self.race = race
         self.speed = 0
         self.abilityscore = AbilityScore()
@@ -70,6 +70,19 @@ class Race:
         elif self.race == 'Halfling':
             self.abilityscore.dexterity += 2
             self.speed += 25
+
+class Class:
+    def __init__(self,
+                 title='Barbarian'):
+        self.title = title
+        self.hit_dice = 0
+        self.set_features()
+
+    def set_features(self):
+        if self.title == 'Barbarian':
+            self.hit_dice += 12
+        elif title == 'Bard':
+            self.hit_dice += 8
 
 class Character():
     def __init__(self,
