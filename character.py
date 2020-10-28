@@ -1,13 +1,22 @@
+import random as rd
+
 class Ability:
-    def __init__(self, base=0):
-        self.base = base
-        self.temp, self.mod, self.score = 0, 0, 0
+    def __init__(self, base=0, temp=0):
+        self.base, self.temp, self.score, self.mod = base, temp, 0, 0
         self.update()
 
     def update(self, temp=0):
         self.temp = temp
         self.score = self.base + self.temp
         self.mod = (self.score)//2 - 5
+
+class Dice:
+    def __init__(self, typ=20):
+        self.typ = typ
+        self.result = typ
+
+    def roll(self):
+        self.result = rd.randint(1, self.typ)
 
 class Stats:
     def __init__(self, str=0, dex=0, con=0, int=0, wis=0, cha=0):
@@ -23,94 +32,37 @@ class Stats:
         for key, temp in enumerate(list):
             self.list[key].update(temp)
 
-    def __add__(self, other):
-        str = self.str + other.str
-        dex = self.dex + other.dex
-        con = self.con + other.con
-        int = self.int + other.int
-        wis = self.wis + other.wis
-        cha = self.cha + other.cha
-        abilityscore = Stats(str,
-                                    dex,
-                                    con,
-                                    int,
-                                    wis,
-                                    cha)
-        return abilityscore
-
-    def return_modifier(self):
-        mod = lambda score: score//2 - 5
-        str = mod(self.str)
-        dex = mod(self.dex)
-        con = mod(self.con)
-        int = mod(self.int)
-        wis = mod(self.wis)
-        cha = mod(self.cha)
-        modifier = Stats(str,
-                                dex,
-                                con,
-                                int,
-                                wis,
-                                cha)
-        return modifier
-
 class Race:
-    def __init__(self,
-                 race='Human'):
+    def __init__(self, race='Human'):
         self.race = race
-        self.speed = 0
-        self.abilityscore = Stats()
-        self.set_traits()
-
-    def set_traits(self):
         if self.race == 'Human':
-            self.abilityscore.str += 1
-            self.abilityscore.dex += 1
-            self.abilityscore.con += 1
-            self.abilityscore.int += 1
-            self.abilityscore.wis += 1
-            self.abilityscore.cha += 1
-            self.speed += 30
+            self.statlist = [1, 1, 1, 1, 1, 1]
+            self.speed = 30
         elif self.race == 'Elf':
-            self.abilityscore.dex += 2
+            self.statlist = [0, 2, 0, 0, 0, 0]
+            self.speed = 30
         elif self.race == 'Dwarf':
-            self.abilityscore.con += 2
-            self.speed += 25
-            self.speed += 30
+            self.statlist = [0, 0, 2, 0, 0, 0]
+            self.speed = 25
         elif self.race == 'Halfling':
-            self.abilityscore.dex += 2
-            self.speed += 25
+            self.statlist = [0, 2, 0, 0, 0, 0]
+            self.speed = 25
 
-class Class:
-    def __init__(self,
-                 title='Barbarian'):
-        self.title = title
-        self.hit_dice = 0
-        self.set_features()
+class Job:
+    def __init__(self, job='Barbarian'):
+        self.job = job
+        if self.job == 'Barbarian':
+            self.hitdie = [Dice(12)]
+        elif job == 'Bard':
+            self.hitdie = [Dice(8)]
 
-    def set_features(self):
-        if self.title == 'Barbarian':
-            self.hit_dice += 12
-        elif title == 'Bard':
-            self.hit_dice += 8
+    def levelup(self):
+        self.hitdie.append(Dice([self.hitdie[0].typ]))
 
 class Character():
-    def __init__(self,
-                 str=10,
-                 dex=10,
-                 con=10,
-                 int=10,
-                 wis=10,
-                 cha=10,
-                 race='Human',
-                 Class_='Barbarian'):
-        self.abilityscore_base = Stats(str,
-                                              dex,
-                                              con,
-                                              int,
-                                              wis,
-                                              cha)
+    def __init__(self, str=10, dex=10, con=10, int=10, wis=10, cha=10,
+                 race='Human', job='Barbarian'):
+        self.stats = Stats(str, dex, con, int, wis, cha)
         self.race = Race(race)
-        self.Class = Class(Class_)
-        self.abilityscore = self.abilityscore_base + self.race.abilityscore
-        self.abilitymodifier = self.abilityscore.return_modifier()
+        self.stats.update([self.race.statlist])
+        self.job = Job(job)
