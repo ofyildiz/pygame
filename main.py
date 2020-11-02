@@ -25,7 +25,8 @@ class App:
     def on_init(self):
         pygame.init()
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
-        self.charsheet = pygame.image.load("characters.png")
+        self.charsheet = pygame.image.load("img/characters.png")
+        self.charsheet2 = pygame.image.load("img/white.png")
 
         for idx in range(4):
             self.charsheet.set_clip(idx*self.charwidth, 0, self.charwidth, self.charheight)
@@ -73,6 +74,7 @@ class App:
         self._display_surf.blit(self.char_king, (50,150))
         self._display_surf.blit(self.char_squire, (50,250))
         self._display_surf.blit(self.char_snake, (50,350))
+        self._display_surf.blit(self.charsheet2, (150,350))
 
     def on_render(self):
         pygame.display.flip()
