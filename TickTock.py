@@ -16,8 +16,9 @@ screen_height = 480
 grid_length = screen_height/3
 offset = 80
 line_thickness = 5
-upper_left_cell_position = (offset+grid_length+line_thickness,grid_length+line_thickness)
+upper_left_cell_position = (offset+grid_length+line_thickness-2,grid_length+line_thickness-2)
 distance_between_cells = grid_length/3
+# There are 9 possible positions for the tokens
 token_positions=[(),(),(),(),(),(),(),(),()]
 token_counter = 0
 for i in range(3):
@@ -41,11 +42,17 @@ def draw_grid():
 def draw_token(position, token_type):
     # token is the gaming piece, which can be either a circle or a cross
     if token_type == "X":
-        token_path = ""
+        token_path = "img/token_X.png"
     elif token_type == "O":
-        token_path = ""
+        token_path = "img/token_O.png"
     token = pygame.image.load(token_path)
-    pygame.transform.scale(token,distance_between_cells-line_thickness)
+    # How does this work?
+    #token.set_clip(0,32 ,32, 32)
+    #token_X = token.subsurface(token.get_clip())
+    pygame.transform.scale(token,(int(distance_between_cells-line_thickness),int(distance_between_cells-line_thickness)))
+    screen.blit(token, position)
+    
+
 
 pygame.init()
 screen = pygame.display.set_mode((screen_width,screen_height))
@@ -59,6 +66,7 @@ while( running ):
             running = False
 
     draw_grid()
+    draw_token(upper_left_cell_position,"X")
     pygame.display.flip()
 
 
