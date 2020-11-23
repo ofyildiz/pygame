@@ -9,6 +9,7 @@
 # distance between cells depends on sprite width and length + grid line width
 
 import pygame
+import numpy
 
 screen_width = 640
 screen_height = 480
@@ -70,7 +71,7 @@ def process_mouse_input():
             # now decide which cell to draw in
             token_cell_counter = 0 
             for pos in token_positions:
-                if mouse_pos[0] > pos[0] and mouse_pos[0] < pos[0] + distance_between_cells and mouse_pos[1] > pos[1] and mouse_pos[1] < pos[1] + distance_between_cells and cell_occupied_by_token_type[token_cell_counter] != "":
+                if mouse_pos[0] > pos[0] and mouse_pos[0] < pos[0] + distance_between_cells and mouse_pos[1] > pos[1] and mouse_pos[1] < pos[1] + distance_between_cells and cell_occupied_by_token_type[token_cell_counter] == "":
                     if rounds %2 == 0:
                         draw_token(pos,"X")
                         cell_occupied_by_token_type[token_cell_counter] = "X"
@@ -83,14 +84,27 @@ def process_mouse_input():
                 token_cell_counter += 1
 
 def check_game_status():
+    token_occupation_matrix = numpy.array(cell_occupied_by_token_type).reshape(3,3)
     # win condition
     # 3 same symbols in one row, column or diagonal
-    for token in cell_occupied_by_token_type:
-        pass
-    # show that game ends
-    if win_condition:
-        pass
-    pass
+    # check rows: 
+    for token_row in token_occupation_matrix.T[:]:
+        token_set = set(token_row)
+        if len(token_set) == 1 and '' not in token_set: 
+            print("you won")
+            return True 
+        else:
+            pass
+
+    # check columns
+    for token_columns in token_occupation_matrix[:]:
+        token_set = set(token_columns)
+        if len(token_set) == 1 and '' not in token_set: 
+            print("you won")
+            return True 
+        else:
+            pass
+    return False
 
 
 pygame.init()
@@ -104,8 +118,8 @@ while( running ):
         if event.type == pygame.QUIT:
             running = False
 
+    check_game_status()
     process_mouse_input()
-    #draw_token(upper_left_cell_position,"X")
     pygame.display.flip()
 
 
