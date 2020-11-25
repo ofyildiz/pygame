@@ -91,23 +91,58 @@ def check_game_status():
     for token_row in token_occupation_matrix.T[:]:
         token_set = set(token_row)
         if len(token_set) == 1 and '' not in token_set: 
-            print("you won")
+            screen.blit(textsurface,(upper_left_cell_position[0],upper_left_cell_position[1]-40))
             return True 
         else:
             pass
-
     # check columns
     for token_columns in token_occupation_matrix[:]:
         token_set = set(token_columns)
         if len(token_set) == 1 and '' not in token_set: 
-            print("you won")
+            screen.blit(textsurface,(upper_left_cell_position[0] ,upper_left_cell_position[1]-40))
             return True 
         else:
             pass
+    # check diagonals
+    if token_occupation_matrix[0][0] == token_occupation_matrix[1][1] and token_occupation_matrix[2][2] == token_occupation_matrix[1][1]and token_occupation_matrix[1][1] != "":
+        screen.blit(textsurface,(upper_left_cell_position[0] ,upper_left_cell_position[1]-40))
+        return True
+    if token_occupation_matrix[0][2] == token_occupation_matrix[1][1] and token_occupation_matrix[2][0] == token_occupation_matrix[1][1]and token_occupation_matrix[1][1] != "":
+        screen.blit(textsurface,(upper_left_cell_position[0] ,upper_left_cell_position[1]-40))
+        return True
+    if rounds == 9:
+        screen.blit(textdraw,(upper_left_cell_position[0] ,upper_left_cell_position[1]-40))
+        return True
     return False
 
+def ask_play_again():
+    global running
+    global cell_occupied_by_token_type
+    global rounds
+    global used_token_cell
+    global token_counter
+    mouse_pos = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    button_yes = pygame.Rect(upper_left_cell_position[0]+grid_length/3*2,upper_left_cell_position[1]-40,30,30)
+    button_no = pygame.Rect(upper_left_cell_position[0]+grid_length/3*2+40,upper_left_cell_position[1]-40,30,30)
+    pygame.draw.rect(screen,[0,255,0],button_yes)
+    pygame.draw.rect(screen,[255,0,0],button_no)
+    if button_yes.collidepoint(mouse_pos) and click[0] == 1:
+        # reset game
+        rounds = 0
+        cell_occupied_by_token_type = [("")] *9
+        used_token_cell = [False]*9
+        token_counter = 0
+        draw_grid()
+    if button_no.collidepoint(mouse_pos) and click[0] == 1:
+        # end game
+        running= False
 
 pygame.init()
+pygame.font.init()
+myfont = pygame.font.SysFont('Comic Sans MS', 25);
+textsurface = myfont.render('You won!',False, (255,255,255))
+textdraw= myfont.render('Draw!',False, (255,255,255))
 screen = pygame.display.set_mode((screen_width,screen_height))
 pygame.display.set_caption("Tic tac toe")
 draw_grid()
@@ -118,8 +153,11 @@ while( running ):
         if event.type == pygame.QUIT:
             running = False
 
-    check_game_status()
+
     process_mouse_input()
+    # if game won, ask if players want to play again:
+    if check_game_status():
+        ask_play_again()
     pygame.display.flip()
 
 
