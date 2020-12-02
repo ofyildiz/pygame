@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from menu import *
 
 class App:
     def __init__(self):
@@ -21,6 +22,29 @@ class App:
         self.charsize = self.charwidth, self.charheight = 32, 32
         self.imidx = 0
         self.imidy = 0
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
+        self.font_name = pygame.font.get_default_font()
+        self.BLACK, self.WHITE = (0,0,0), (255,255,255)
+        self.display = pygame.Surface((self.width,self.height))
+        self.curr_menu = MainMenu(self)
+
+    def check_events(self):
+        for event in pygame.event.get():
+          if event.type == pygame.QUIT:
+              self.running= False
+              self.curr_menu.run_display = False
+          if event.type == pygame.KEYDOWN:
+             if event.key == pygame.K_RETURN:
+                  self.START_KEY = True
+             if event.key == pygame.K_BACKSPACE:
+                  self.BACK_KEY = True
+             if event.key == pygame.K_DOWN:
+                 self.DOWN_KEY = True
+             if event.key == pygame.K_UP:
+                  self.UP_KEY = True
+
+    def reset_keys(self):
+        self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
 
     def on_init(self):
         pygame.init()
@@ -89,9 +113,11 @@ class App:
 
         while( self._running ):
             for event in pygame.event.get():
-                self.on_event(event)
-            self.on_loop()
+                # self.on_event(event)
+                self.check_events()
+            # self.on_loop()
             self.on_render()
+            self.curr_menu.display_menu()
         self.on_cleanup()
 
 if __name__ == "__main__" :
