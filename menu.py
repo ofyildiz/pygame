@@ -87,6 +87,10 @@ class CreditsMenu(Menu):
     def display_menu(self):
         while self.run_display:
             self.App.check_events()
+            if self.App.START_KEY or self.App.BACK_KEY:
+                self.App.main_menu.run_display = True;
+                self.App.curr_menu = self.App.main_menu
+                self.run_display = False
             self.App.display.fill(self.App.BLACK)
             self.draw_text('Credits', 20, self.App.width / 2, self.App.height/ 2 - 20)
             self.draw_text('Made by Ömario and Yöshi', 15, self.App.width/ 2, self.App.height/ 2 + 10)

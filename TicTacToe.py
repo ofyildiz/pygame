@@ -12,6 +12,7 @@ import numpy
 
 class TicTacToe():
     def __init__(self,App):
+        self.App = App
         self.playing =False
         self.screen_width = App.width
         self.screen_height = App.height
@@ -145,11 +146,16 @@ class TicTacToe():
             running = True
             while( running ):
                 # Check events
+                self.App.check_events()
+                if self.App.BACK_KEY:
+                    self.playing = False
+                    running = False
+                    self.App.main_menu.run_display = True;
+                    self.App.curr_menu = self.App.main_menu
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT:
                         running = False
-
-
+                        self.playing = False
                 self.process_mouse_input()
                 # if game won, ask if players want to play again:
                 if self.check_game_status():
