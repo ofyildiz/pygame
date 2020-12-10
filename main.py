@@ -73,12 +73,12 @@ class App:
             self._running = False
 
         while(self._running):
-            for event in pygame.event.get():
-                self.on_event(event)
             self.check_events()
             if self.BACK_KEY:
                 self.playing = False
                 self.main_menu.run_display = True
+            for event in pygame.event.get():
+                self.on_event(event)
             self.on_loop()
             self.on_render()
             self.curr_menu.display_menu()

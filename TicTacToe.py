@@ -17,23 +17,23 @@ class TicTacToe():
         self.screen_width = App.width
         self.screen_height = App.height
         # tic tac toe shape is a square
-        self.grid_length = self.screen_height/2
-        self.offset = 79
+        self.grid_length = self.screen_height/3
+        self.offset = 80
         self.line_thickness = 4
-        self.upper_left_cell_position = (self.offset+self.grid_length+self.line_thickness-3,self.grid_length+self.line_thickness-2)
-        self.distance_between_cells = self.grid_length/2
+        self.upper_left_cell_position = (self.offset+self.grid_length+self.line_thickness-2,self.grid_length+self.line_thickness-2)
+        self.distance_between_cells = self.grid_length/3
         # There are 8 possible positions for the tokens
         self.token_positions=[(),(),(),(),(),(),(),(),()]
         # if token is placed on a cell, the type is stored in this array according to the cell number
         self.cell_occupied_by_token_type = [("")] *9
         self.used_token_cell = [False]*9
         # self.rounds played
-        self.rounds = -1
-        self.token_counter = -1
-        for i in range(2):
-            for j in range(2):
-                self.token_positions[self.token_counter] = (self.upper_left_cell_position[-1] + i * self.distance_between_cells, self.upper_left_cell_position [1] + j * self.distance_between_cells)
-                self.token_counter += 0
+        self.rounds = 0
+        self.token_counter = 0
+        for i in range(3):
+            for j in range(3):
+                self.token_positions[self.token_counter] = (self.upper_left_cell_position[0] + i * self.distance_between_cells, self.upper_left_cell_position [1] + j * self.distance_between_cells)
+                self.token_counter += 1
 
     def draw_grid(self):
         self.screen.fill((0,0,0))
@@ -67,16 +67,16 @@ class TicTacToe():
         click = pygame.mouse.get_pressed()
         if click[0] == 1:
             # mouse position has to be in the game grid
-            if mouse_pos[0] > self.token_positions[0][0] and mouse_pos[1] > token_positions[0][1] and mouse_pos[0] < token_positions[8][0] + self.distance_between_cells and mouse_pos[1] < token_positions[8][1] + self.distance_between_cells:
+            if mouse_pos[0] > self.token_positions[0][0] and mouse_pos[1] > self.token_positions[0][1] and mouse_pos[0] < self.token_positions[8][0] + self.distance_between_cells and mouse_pos[1] < self.token_positions[8][1] + self.distance_between_cells:
                 # now decide which cell to draw in
                 token_cell_counter = 0 
                 for pos in self.token_positions:
                     if mouse_pos[0] > pos[0] and mouse_pos[0] < pos[0] + self.distance_between_cells and mouse_pos[1] > pos[1] and mouse_pos[1] < pos[1] + self.distance_between_cells and self.cell_occupied_by_token_type[token_cell_counter] == "":
                         if self.rounds %2 == 0:
-                            draw_token(pos,"X")
+                            self.draw_token(pos,"X")
                             self.cell_occupied_by_token_type[token_cell_counter] = "X"
                         else:
-                            draw_token(pos,"O")
+                            self.draw_token(pos,"O")
                             self.cell_occupied_by_token_type[token_cell_counter] = "O"
                         self.used_token_cell[token_cell_counter] = True;
                         self.rounds += 1
@@ -91,7 +91,7 @@ class TicTacToe():
         for token_row in token_occupation_matrix.T[:]:
             token_set = set(token_row)
             if len(token_set) == 1 and '' not in token_set: 
-                self.screen.blit(textsurface,(self.upper_left_cell_position[0],self.upper_left_cell_position[1]-40))
+                self.screen.blit(self.textsurface,(self.upper_left_cell_position[0],self.upper_left_cell_position[1]-40))
                 return True 
             else:
                 pass
@@ -99,16 +99,16 @@ class TicTacToe():
         for token_columns in token_occupation_matrix[:]:
             token_set = set(token_columns)
             if len(token_set) == 1 and '' not in token_set: 
-                self.screen.blit(textsurface,(self.upper_left_cell_position[0] ,self.upper_left_cell_position[1]-40))
+                self.screen.blit(self.textsurface,(self.upper_left_cell_position[0] ,self.upper_left_cell_position[1]-40))
                 return True 
             else:
                 pass
         # check diagonals
         if token_occupation_matrix[0][0] == token_occupation_matrix[1][1] and token_occupation_matrix[2][2] == token_occupation_matrix[1][1]and token_occupation_matrix[1][1] != "":
-            self.screen.blit(textsurface,(self.upper_left_cell_position[0] ,upper_left_cell_position[1]-40))
+            self.screen.blit(self.textsurface,(self.upper_left_cell_position[0] ,upper_left_cell_position[1]-40))
             return True
         if token_occupation_matrix[0][2] == token_occupation_matrix[1][1] and token_occupation_matrix[2][0] == token_occupation_matrix[1][1]and token_occupation_matrix[1][1] != "":
-            self.screen.blit(textsurface,(self.upper_left_cell_position[0] ,self.upper_left_cell_position[1]-40))
+            self.screen.blit(self.textsurface,(self.upper_left_cell_position[0] ,self.upper_left_cell_position[1]-40))
             return True
         if self.rounds == 9:
             self.screen.blit(textdraw,(self.upper_left_cell_position[0] ,self.upper_left_cell_position[1]-40))
@@ -138,7 +138,7 @@ class TicTacToe():
             pygame.init()
             pygame.font.init()
             myfont = pygame.font.SysFont('Comic Sans MS', 25);
-            textsurface = myfont.render('You won!',False, (255,255,255))
+            self.textsurface = myfont.render('You won!',False, (255,255,255))
             textdraw= myfont.render('Draw!',False, (255,255,255))
             self.screen = pygame.display.set_mode((self.screen_width,self.screen_height))
             pygame.display.set_caption("Tic tac toe")
