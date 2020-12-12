@@ -45,7 +45,7 @@ class App:
 
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-        #self.avatar = None
+        self.avatar = None
 
     def on_init(self):
         pygame.init()
