@@ -24,7 +24,7 @@ class App:
         #self.font_name = pygame.font.SysFont("arial",20)
         self.BLACK, self.WHITE = (0,0,0), (255,255,255)
         self.display = pygame.Surface((self.width,self.height))
-        self.main_menu = MainMenu(self)
+        self.main_menu = menu.MainMenu()
         self.curr_menu = self.main_menu
         self.tictactoe = TicTacToe(self)
 
