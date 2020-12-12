@@ -16,8 +16,6 @@ class App:
         self.size = self.width, self.height = 640, 400
         self.FPS = 60
 
-        self.imidx = 0
-        self.imidy = 0
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
         self.font_name = pygame.font.get_default_font()
         #pygame.font.init()
