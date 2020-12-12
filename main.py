@@ -1,7 +1,7 @@
 import animate
 import pygame
 from pygame.locals import *
-from menu import *
+import menu
 from TicTacToe import *
 
 class App:
