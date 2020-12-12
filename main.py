@@ -24,7 +24,7 @@ class App:
         self.display = pygame.Surface((self.width,self.height))
         self.main_menu = menu.MainMenu()
         self.curr_menu = self.main_menu
-        self.tictactoe = TicTacToe(self)
+        self.tictactoe = TicTacToe.TicTacToe()
 
     def check_events(self):
         for event in pygame.event.get():
