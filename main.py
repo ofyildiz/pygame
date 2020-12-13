@@ -22,9 +22,11 @@ class App:
         #self.font_name = pygame.font.SysFont("arial",20)
         self.BLACK, self.WHITE = (0,0,0), (255,255,255)
         self.display = pygame.Surface((self.width,self.height))
-        self.main_menu = menu.MainMenu()
+        self.main_menu = menu.MainMenu(self)
         self.curr_menu = self.main_menu
-        self.tictactoe = TicTacToe.TicTacToe()
+        self.tictactoe = TicTacToe.TicTacToe(self)
+        self.avatar = None
+        self.background = None
 
     def check_events(self):
         for event in pygame.event.get():
@@ -43,12 +45,12 @@ class App:
 
     def reset_keys(self):
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
-        self.avatar = None
 
     def on_init(self):
         pygame.init()
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
-        self.avatar = animate.Animation('img/characters.png', rows=4, cols=23, pos=0, num=4)
+        self.background = animate.Background('map/example_02.csv')
+        self.avatar = animate.Animation('img/white.png', rows=1, cols=1, pos=0, num=1, x=self.width//2, y=(self.height+16)//2)
 
     def on_event(self, event):
         if event.type == pygame.QUIT:
@@ -57,7 +59,8 @@ class App:
     def on_loop(self):
         if self.playing:
             self._display_surf.fill(pygame.color.Color('black'))
-            self.avatar.update(self._display_surf)
+            self.background.update(self._display_surf)
+            self.avatar.update(self._display_surf, self.background)
 
     def on_render(self):
         pygame.display.flip()
