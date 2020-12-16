@@ -28,6 +28,11 @@ class MainMenu(Menu):
     def __init__(self,App):
         Menu.__init__(self,App)
         self.state = "Start"
+        self.loop_menu_track = 'Soundeffects/Loop-Menu.wav'
+        pygame.mixer.init();
+        pygame.mixer.music.load(self.loop_menu_track)
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.pause()
         self.startx, self.starty = self.mid_w, self.mid_h+30
         self.optionsx, self.optionsy = self.mid_w, self.mid_h+60
         self.creditsx, self.creditsy = self.mid_w, self.mid_h+90
@@ -35,6 +40,7 @@ class MainMenu(Menu):
 
     def display_menu(self):
         while(self.run_display):
+            pygame.mixer.music.unpause()
             self.App.check_events()
             self.check_input()
             self.App.display.fill(self.App.BLACK)
@@ -44,6 +50,7 @@ class MainMenu(Menu):
             self.draw_text("Credits",20,self.creditsx,self.creditsy)
             self.draw_cursor()
             self.blit_screen()
+            pygame.mixer.music.pause() 
 
     def move_cursor(self):
         if self.App.DOWN_KEY:
